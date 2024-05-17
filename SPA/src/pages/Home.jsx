@@ -14,7 +14,7 @@ export const Home = () => {
     const activeAccount = instance.getActiveAccount();
     //get access token from activeAccount
     const request = {
-        scopes: ["api://e814efa9-b1e8-4d48-901b-22292459edbd/Todolist.Read"]
+        scopes: [process.env.REACT_APP_TODO_API_READ_SCOPE]
     }
     instance.acquireTokenSilent(request)
     .then((response) => {
