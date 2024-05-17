@@ -19,6 +19,17 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Create env file
+        run: |
+          cat << EOF > /SPA/.env.production
+          REACT_APP_APIM_SUBSCRIPTION=${{ secrets.REACT_APP_APIM_SUBSCRIPTION }}
+          REACT_APP_CLIENT_ID=${{ secrets.REACT_APP_CLIENT_ID }}
+          REACT_APP_AUTHORITY=${{ secrets.REACT_APP_AUTHORITY }}
+          REACT_APP_TODO_API_READ_SCOPE=${{ secrets.REACT_APP_TODO_API_READ_SCOPE }}
+          REACT_APP_TODO_API_READ_WRITE_SCOPE=${{ secrets.REACT_APP_TODO_API_READ_WRITE_SCOPE }}
+          REACT_APP_TODO_API_ENDPOINT=${{ secrets.REACT_APP_TODO_API_ENDPOINT }}
+          EOF
+          
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
