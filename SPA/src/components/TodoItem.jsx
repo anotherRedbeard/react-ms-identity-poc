@@ -69,7 +69,7 @@ export const TodoItem = (props) => {
                     inline
                     id={props.id}
                     type="checkbox"
-                    defaultChecked={props.completed}
+                    defaultChecked={props.isComplete}
                     onChange={() => props.completeTask(props.id)}
                 />
                 <label className="todo-label" htmlFor={props.id}>

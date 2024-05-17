@@ -12,8 +12,8 @@ import { LogLevel } from "@azure/msal-browser";
  */
 export const msalConfig = {
     auth: {
-        clientId: "b082de58-4252-4a25-a04d-839f047caa56", // This is the ONLY mandatory field that you need to supply.
-        authority: "https://login.microsoftonline.com/9c56e6e1-9e2a-4a5a-b369-fed474e558db", // Defaults to "https://login.microsoftonline.com/common"
+        clientId: process.env.REACT_APP_CLIENT_ID, // This is the ONLY mandatory field that you need to supply.
+        authority: process.env.REACT_APP_AUTHORITY, // Defaults to "https://login.microsoftonline.com/common"
         redirectUri: "/", // You must register this URI on Azure Portal/App Registration. Defaults to window.location.origin
         postLogoutRedirectUri: "/", // Indicates the page to navigate after logout.
         clientCapabilities: ["CP1"] // this lets the resource owner know that this client is capable of handling claims challenge.
@@ -57,10 +57,10 @@ export const msalConfig = {
  */
 export const protectedResources = {
     apiTodoList: {
-        endpoint: "http://localhost:5001/api/todolist",
+        endpoint: process.env.REACT_APP_TODO_API_ENDPOINT,
         scopes: {
-            read: [ "api://e814efa9-b1e8-4d48-901b-22292459edbd/Todolist.Read" ],
-            write: [ "api://e814efa9-b1e8-4d48-901b-22292459edbd/Todolist.ReadWrite" ]
+            read: [ process.env.REACT_APP_TODO_API_READ_SCOPE ],
+            write: [ process.env.REACT_APP_TODO_API_READ_WRITE_SCOPE ]
         }
     }
 }

@@ -44,6 +44,11 @@ const useFetchWithMsal = (msalRequest) => {
                 const bearer = `Bearer ${result.accessToken}`;            
                 headers.append("Authorization", bearer);
 
+                //add apim key here
+                const subscriptionKey = process.env.REACT_APP_APIM_SUBSCRIPTION;
+                headers.append("Ocp-Apim-Subscription-Key", subscriptionKey);
+                headers.append("Ocp-Apim-Trace", "true");
+
                 if (data) headers.append('Content-Type', 'application/json');
 
                 let options = {
@@ -53,12 +58,23 @@ const useFetchWithMsal = (msalRequest) => {
                 };
 
                 setIsLoading(true);
+                response = await fetch(endpoint, options);
+                if (response.ok) {
+                    const text = await response.text();
+                    const data = text ? JSON.parse(text) : {};
+                    console.log("response:  ", data);
+                    setData(data);
+                    setIsLoading(false);
+                    return data;
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+                //response = await (await fetch(endpoint, options)).json();
+                //console.log("response:  ", response);
+                //setData(response);
 
-                response = await (await fetch(endpoint, options)).json();
-                setData(response);
-
-                setIsLoading(false);
-                return response;
+                //setIsLoading(false);
+                //return response;
             } catch (e) {
                 setError(e);
                 setIsLoading(false);

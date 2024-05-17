@@ -31,37 +31,32 @@ export const ListView = (props) => {
 
     const handleCompleteTask = (id) => {
         const updatedTask = tasks.find(task => id === task.id);
-        updatedTask.completed = !updatedTask.completed;
+        updatedTask.isComplete = !updatedTask.isComplete;
 
-        execute("PUT", protectedResources.apiTodoList.endpoint + `/${id}`, updatedTask).then(() => {
-            const updatedTasks = tasks.map(task => {
-                if (id === task.id) {
-                    return { ...task, completed: !task.completed }
-                }
-                return task;
-            });
-            setTasks(updatedTasks);
-        });
+        execute("PUT", protectedResources.apiTodoList.endpoint + `/${id}`, updatedTask);
     }
 
     const handleAddTask = (name) => {
         const newTask = {
-            owner: account.idTokenClaims?.oid,
-            id: nanoid(),
             name: name,
-            completed: false
+            isComplete: false
         };
 
+        console.log("Adding task: ", newTask);
         execute("POST", protectedResources.apiTodoList.endpoint, newTask).then((response) => {
-            if (response && response.message === "success") {
-                setTasks([...tasks, newTask]);
+            console.log("Response: ", response.message);
+            if (response) {
+                // Use the task object from the response to get the id
+                const taskWithId = { ...newTask, id: response.id };
+                setTasks([...tasks, taskWithId]);
+                console.log("Tasks: ", tasks);
             }
         })
     }
 
     const handleDeleteTask = (id) => {
         execute("DELETE", protectedResources.apiTodoList.endpoint + `/${id}`).then((response) => {
-            if (response && response.message === "success") {
+            if (response) {
                 const remainingTasks = tasks.filter(task => id !== task.id);
                 setTasks(remainingTasks);
             }
@@ -72,28 +67,22 @@ export const ListView = (props) => {
         const updatedTask = tasks.find(task => id === task.id);
         updatedTask.name = newName;
 
-        execute("PUT", protectedResources.apiTodoList.endpoint + `/${id}`, updatedTask).then(() => {
-            const updatedTasks = tasks.map(task => {
-                if (id === task.id) {
-                    return { ...task, name: newName }
-                }
-                return task;
-            });
-            setTasks(updatedTasks);
-        });
+        execute("PUT", protectedResources.apiTodoList.endpoint + `/${id}`, updatedTask);
     }
 
-    const taskList = tasks.map(task => (
-        <TodoItem
-            id={task.id}
-            name={task.name}
-            completed={task.completed}
-            key={task.id}
-            completeTask={handleCompleteTask}
-            deleteTask={handleDeleteTask}
-            editTask={handleEditTask}
-        />
-    ));
+    const taskList = tasks
+        .filter(task => !task.isComplete)
+        .map(task => (
+            <TodoItem
+                id={task.id}
+                name={task.name}
+                isComplete={task.isComplete}
+                key={task.id}
+                completeTask={handleCompleteTask}
+                deleteTask={handleDeleteTask}
+                editTask={handleEditTask}
+            />
+        ));
 
     const listHeadingRef = useRef(null);
     const prevTaskLength = usePrevious(tasks.length);
