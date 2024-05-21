@@ -61,6 +61,12 @@ const useFetchWithMsal = (msalRequest) => {
                 response = await fetch(endpoint, options);
                 if (response.ok) {
                     const text = await response.text();
+                    /*let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (error) {
+                        data = text;
+                    }*/
                     const data = text ? JSON.parse(text) : {};
                     console.log("response:  ", data);
                     setData(data);

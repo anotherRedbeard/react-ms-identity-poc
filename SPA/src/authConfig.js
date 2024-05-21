@@ -57,11 +57,14 @@ export const msalConfig = {
  */
 export const protectedResources = {
     apiTodoList: {
-        endpoint: process.env.REACT_APP_TODO_API_ENDPOINT,
+        endpoint: process.env.REACT_APP_API_BASE_ENDPOINT + 'todo/api/todoitems',
         scopes: {
             read: [ process.env.REACT_APP_TODO_API_READ_SCOPE ],
             write: [ process.env.REACT_APP_TODO_API_READ_WRITE_SCOPE ]
         }
+    },
+    apiConfig: {
+        endpoint: process.env.REACT_APP_API_BASE_ENDPOINT + 'config-api',
     }
 }
 

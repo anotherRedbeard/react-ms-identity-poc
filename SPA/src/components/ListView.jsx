@@ -22,6 +22,7 @@ function usePrevious(value) {
 export const ListView = (props) => {
     const { instance } = useMsal();
     const account = instance.getActiveAccount();
+    const [configData, setConfigData] = useState('');
 
     const { error, execute } = useFetchWithMsal({
         scopes: protectedResources.apiTodoList.scopes.write
@@ -93,12 +94,27 @@ export const ListView = (props) => {
         }
     }, [tasks.length, prevTaskLength]);
 
+    useEffect(() => {
+        const getConfigData = async () => {
+            try {
+                execute("GET", protectedResources.apiConfig.endpoint + '/getconfigwithmsi').then((response) => {
+                    setConfigData(response.message);
+                    console.log("Config Data: ", response);
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getConfigData();
+    }, [execute, configData])
+
     if (error) {
         return <div>Error: {error.message}</div>;
     }
     
     return (
         <div className="data-area-div">
+            <div>Message from App Config: {configData}</div>
             <TodoForm addTask={handleAddTask} />
             <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}></h2>
             <ListGroup className="todo-list">
