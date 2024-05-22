@@ -23,6 +23,7 @@ export const ListView = (props) => {
     const { instance } = useMsal();
     const account = instance.getActiveAccount();
     const [configData, setConfigData] = useState('');
+    const [tokenMessageData, setTokenMessageData] = useState('');
 
     const { error, execute } = useFetchWithMsal({
         scopes: protectedResources.apiTodoList.scopes.write
@@ -108,13 +109,28 @@ export const ListView = (props) => {
         getConfigData();
     }, [execute, configData])
 
+    useEffect(() => {
+        const getTokenMessageData = async () => {
+            try {
+                execute("GET", protectedResources.apiConfig.endpoint + '/getconfigusingtoken').then((response) => {
+                    setTokenMessageData(response.message);
+                    console.log("Token Message Data: ", response);
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getTokenMessageData();
+    }, [execute, tokenMessageData])
+
     if (error) {
         return <div>Error: {error.message}</div>;
     }
     
     return (
         <div className="data-area-div">
-            <div>Message from App Config: {configData}</div>
+            <div>Message from App Config by environment: {configData}</div>
+            <div>Message from App Config by token claims: {tokenMessageData}</div>
             <TodoForm addTask={handleAddTask} />
             <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}></h2>
             <ListGroup className="todo-list">
