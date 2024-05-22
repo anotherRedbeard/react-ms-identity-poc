@@ -24,6 +24,7 @@ export const ListView = (props) => {
     const account = instance.getActiveAccount();
     const [configData, setConfigData] = useState('');
     const [tokenMessageData, setTokenMessageData] = useState('');
+    const [bootstrappedData, setBootstrappedData] = useState('');
 
     const { error, execute } = useFetchWithMsal({
         scopes: protectedResources.apiTodoList.scopes.write
@@ -123,6 +124,20 @@ export const ListView = (props) => {
         getTokenMessageData();
     }, [execute, tokenMessageData])
 
+    useEffect(() => {
+        const getBootstrappedData = async () => {
+            try {
+                execute("GET", protectedResources.apiConfig.endpoint + '/getconfigbootstrapped').then((response) => {
+                    setBootstrappedData(response.message);
+                    console.log("Bootstrapped Data: ", response);
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getBootstrappedData();
+    }, [execute, bootstrappedData])
+
     if (error) {
         return <div>Error: {error.message}</div>;
     }
@@ -131,6 +146,7 @@ export const ListView = (props) => {
         <div className="data-area-div">
             <div>Message from App Config by environment: {configData}</div>
             <div>Message from App Config by token claims: {tokenMessageData}</div>
+            <div>Message from App Config using bootstrapped value: {bootstrappedData}</div>
             <TodoForm addTask={handleAddTask} />
             <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}></h2>
             <ListGroup className="todo-list">
