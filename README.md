@@ -100,4 +100,4 @@ The workflow relies on the following GitHub Secrets for its environment variable
 |GITHUB_TOKEN|Automatic token that is generate within Github, you can get more information [here](https://docs.github.com/en/actions/security-guides/automatic-token-authentication)|
 |AZURE_STATIC_WEB_APPS_API_TOKEN|This is the deployment token that is provided by Static WebApp. More info can be found in the [Reset Deployment Tokens](https://learn.microsoft.com/en-us/azure/static-web-apps/deployment-token-management) doc.|
 
-*The `AZURE_STATIC_WEB_APPS_DEPLOYMENT_TOKEN` was set for me by Azure Static Web Apps when I setup the build in the portal. We are creating this for you as an output from the bicep template.*
+*The `AZURE_STATIC_WEB_APPS_DEPLOYMENT_TOKEN` will need to be set in your github environment before you the automated pipeline will work correctly. You can use the [bicep section](https://github.com/anotherRedbeard/react-ms-identity-poc/blob/main/iac/bicep/README.md) to get the infrastructure to deploy and then use the `az staticwebapp secrets list` command to get the deployment token.*

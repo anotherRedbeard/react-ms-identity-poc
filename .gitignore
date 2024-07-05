@@ -1,3 +1,6 @@
+# all dev bicepparm files
+/**/*.dev.bicepparam
+
 # Logs
 logs
 *.log
