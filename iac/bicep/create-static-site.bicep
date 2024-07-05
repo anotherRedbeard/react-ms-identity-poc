@@ -1,5 +1,9 @@
 @description('Provide the name of the static site instance.')
 param staticSiteName string = ''
+@description('Provide the url of the github repo that stores the code.')
+param ghRepoUrl string = ''
+@description('Provide the name of the branch for the github repo that stores the code.')
+param ghBranch string = ''
 
 @description('Provide the location of the static site instance.')
 param location string = resourceGroup().location
@@ -22,6 +26,8 @@ module service 'br/public:avm/res/web/static-site:0.3.1' = {
     managedIdentities: {
       systemAssigned: true
     }
+    branch: ghBranch
+    repositoryUrl: ghRepoUrl
   }
 }
 
