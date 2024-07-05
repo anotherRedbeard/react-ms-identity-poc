@@ -22,6 +22,21 @@ This project demonstrates a React single-page application (SPA) that integrates 
   The frontend app will need to be configured to add these `API Permissions` so that when the MSAL library requests the access token, it will contain these two roles. The setup is similar to how you can use an [OAuth Server](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-oauth2#register-applications-with-the-oauth-server) in Azure API Management.  API Management is not necessary to use with this POC I am just referring to the documentation on how to setup an OAuth server there as it is similar.
 - An implementation of the Todo API. The one I'm using is in [another repo](https://github.com/anotherRedbeard/web-api-demo-container) of mine and can be deployed to an App Server, Container App, or AKS. Follow the instructions on that repo for specifics. You will need to implement the Azure Configuration feature on that example for this POC to work fully.
 
+- Populate all of the GitHub secrets with values from your environment:
+
+    | Secret Name | Description |
+    | ----------- | ----------- |
+    |REACT_APP_APIM_SUBSCRIPTION|The subscription id for the API |
+    |REACT_APP_CLIENT_ID|The client id of the react app |
+    |REACT_APP_AUTHORITY|The authority url for the Entra ID tenant|
+    |REACT_APP_TODO_API_READ_SCOPE|The full uri for the Todolist.Read scope|
+    |REACT_APP_TODO_API_READ_WRITE_SCOPE|The full uri for the Todolist.ReadWrite scopt|
+    |REACT_APP_API_BASE_ENDPOINT|The base url for the todo api|
+    |GITHUB_TOKEN|Automatic token that is generate within Github, you can get more information [here](https://docs.github.com/en/actions/security-guides/automatic-token-authentication)|
+    |AZURE_STATIC_WEB_APPS_API_TOKEN|This is the deployment token that is provided by Static WebApp. More info can be found in the [Reset Deployment Tokens](https://learn.microsoft.com/en-us/azure/static-web-apps/deployment-token-management) doc.|
+
+    *The `AZURE_STATIC_WEB_APPS_DEPLOYMENT_TOKEN` will need to be set in your github environment before you the automated pipeline will work correctly. You can use the [bicep section](https://github.com/anotherRedbeard/react-ms-identity-poc/blob/main/iac/bicep/README.md) to get the infrastructure to deploy and then use the `az staticwebapp secrets list` command to get the deployment token.*
+
 ## Getting Started
 
 1. **Clone the repository**
@@ -62,7 +77,7 @@ This project demonstrates a React single-page application (SPA) that integrates 
 
     Your browser should open to `http://localhost:3000` displaying the application
 
-## Deployment via GitHub Actions
+## Deployment Pipeline Description 
 
 The project is configured to automatically deploy to Azure Static Web Apps through a GitHub Actions workflow. This workflow is triggered on push events to the `main` branch and on pull request events against the `main` branch. It can also be manually triggered via the `workflow_dispatch` event.
 
@@ -77,27 +92,16 @@ The project is configured to automatically deploy to Azure Static Web Apps throu
     - `api_location`: Since this project does not contain an API, this is set to an empty value.
     - `output_location`: Specifies the directory where the build output is located, typically `build`.
 
-### Pull Request Handling
+## Deployment to Azure via GitHub Actions
 
-When a pull request is closed, a specific job within the workflow is responsible for handling the closure. This job ensures that any temporary deployment for the pull request is properly managed and, if necessary, removed.
+Here are the steps you can follow to deploy this into Azure.
 
-### Manual Trigger
+1. **Create Static Web App**: Use the bicep template [here](https://github.com/anotherRedbeard/react-ms-identity-poc/tree/main/iac/bicep) to get the Static Web App created.
 
-The workflow can be manually triggered via the GitHub UI, allowing for deployments to be initiated outside of the automatic triggers.
+2. **Get the deployment token**: You will need to run the following command to get the deployment token from the newly created Static Web App and populated it in your GitHub secret.
 
-### GitHub Secrets
+    ```bash
+    az staticwebapp secrets list --name <static_webapp_name> --resource-group <resource_group_name>
+    ```
 
-The workflow relies on the following GitHub Secrets for its environment variables:
-
-| Secret Name | Description |
-| ----------- | ----------- |
-|REACT_APP_APIM_SUBSCRIPTION|The subscription id for the API |
-|REACT_APP_CLIENT_ID|The client id of the react app |
-|REACT_APP_AUTHORITY|The authority url for the Entra ID tenant|
-|REACT_APP_TODO_API_READ_SCOPE|The full uri for the Todolist.Read scope|
-|REACT_APP_TODO_API_READ_WRITE_SCOPE|The full uri for the Todolist.ReadWrite scopt|
-|REACT_APP_API_BASE_ENDPOINT|The base url for the todo api|
-|GITHUB_TOKEN|Automatic token that is generate within Github, you can get more information [here](https://docs.github.com/en/actions/security-guides/automatic-token-authentication)|
-|AZURE_STATIC_WEB_APPS_API_TOKEN|This is the deployment token that is provided by Static WebApp. More info can be found in the [Reset Deployment Tokens](https://learn.microsoft.com/en-us/azure/static-web-apps/deployment-token-management) doc.|
-
-*The `AZURE_STATIC_WEB_APPS_DEPLOYMENT_TOKEN` will need to be set in your github environment before you the automated pipeline will work correctly. You can use the [bicep section](https://github.com/anotherRedbeard/react-ms-identity-poc/blob/main/iac/bicep/README.md) to get the infrastructure to deploy and then use the `az staticwebapp secrets list` command to get the deployment token.*
+3. **Redirect URI and CORS**: You will need to update your redirect URI in your app registration and you might also need to add it to CORS.
