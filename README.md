@@ -104,4 +104,6 @@ Here are the steps you can follow to deploy this into Azure.
     az staticwebapp secrets list --name <static_webapp_name> --resource-group <resource_group_name>
     ```
 
-3. **Redirect URI and CORS**: You will need to update your redirect URI in your app registration and you might also need to add it to CORS.
+3. **Run the Pipeline**: Manually kick off the pipeline from the Actions tab
+
+4. **Redirect URI and CORS**: You will need to update your redirect URI in your app registration and you might also need to add it to CORS.
