@@ -7,8 +7,8 @@ This project demonstrates a React single-page application (SPA) that integrates 
 - **Authentication**: Utilizes [@azure/msal-react](https://www.npmjs.com/package/@azure/msal-react) for handling authentication with Microsoft Identity Platform.
 - **Azure Static Web Apps**: Instructions on deploying to Azure Static Web Apps for seamless hosting and scalability.
 - **Protected API Calls**: Demonstrates how to call a protected web API using tokens acquired via MSAL.
+- **Infrastructure as Code (IAC)**: Take a look at the [Bicep](https://github.com/anotherRedbeard/react-ms-identity-poc/tree/main/iac/bicep) templates to get this up and running in your subscription.
 - *coming soon* - **Add Azure Configuration to get secrets**
-- *coming soon* - **Add Infrastructure as Code (IAC)**
 
 ## Prerequisites
 
