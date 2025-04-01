@@ -96,14 +96,21 @@ The project is configured to automatically deploy to Azure Static Web Apps throu
 
 Here are the steps you can follow to deploy this into Azure.
 
-1. **Create Static Web App**: Use the bicep template [here](https://github.com/anotherRedbeard/react-ms-identity-poc/tree/main/iac/bicep) to get the Static Web App created.
+1. **Clone the repository**
 
-2. **Get the deployment token**: You will need to run the following command to get the deployment token from the newly created Static Web App and populated it in your GitHub secret.
+    ```bash
+    git clone https://github.com/your-repository-url.git
+    cd react-ms-identity-poc
+    ```
+
+2. **Create Static Web App**: I have created a bicep template that you can use to get the Static Web App created. Use instructions [here](https://github.com/anotherRedbeard/react-ms-identity-poc/tree/main/iac/bicep) to get the Static Web App created.
+
+3. **Get the deployment token**: You will need to run the following command to get the deployment token from the newly created Static Web App and populated it in the `AZURE_STATIC_WEB_APPS_DEPLOYMENT_TOKEN` GitHub secret.
 
     ```bash
     az staticwebapp secrets list --name <static_webapp_name> --resource-group <resource_group_name>
     ```
 
-3. **Run the Pipeline**: Manually kick off the pipeline from the Actions tab
+4. **Run the Pipeline**: Manually kick off the pipeline from the Actions tab
 
-4. **Redirect URI and CORS**: You will need to update your redirect URI in your app registration and you might also need to add it to CORS.
+5. **Redirect URI and CORS**: You will need to update your redirect URI in your app registration. I am using Azure API Management to front all of my API calls so I also have to add the new Static Web App URI to CORS.
