@@ -30,7 +30,7 @@ This project demonstrates a React single-page application (SPA) that integrates 
     |REACT_APP_CLIENT_ID|The client id of the react app |
     |REACT_APP_AUTHORITY|The authority url for the Entra ID tenant|
     |REACT_APP_TODO_API_READ_SCOPE|The full uri for the Todolist.Read scope|
-    |REACT_APP_TODO_API_READ_WRITE_SCOPE|The full uri for the Todolist.ReadWrite scopt|
+    |REACT_APP_TODO_API_READ_WRITE_SCOPE|The full uri for the Todolist.ReadWrite scope|
     |REACT_APP_API_BASE_ENDPOINT|The base url for the todo api|
     |GITHUB_TOKEN|Automatic token that is generate within Github, you can get more information [here](https://docs.github.com/en/actions/security-guides/automatic-token-authentication)|
     |AZURE_STATIC_WEB_APPS_API_TOKEN|This is the deployment token that is provided by Static WebApp. More info can be found in the [Reset Deployment Tokens](https://learn.microsoft.com/en-us/azure/static-web-apps/deployment-token-management) doc.|

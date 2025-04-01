@@ -39,7 +39,7 @@ Before you begin, ensure you have the following installed:
     az account set --subscription "<Your-Subscription-ID>"
     ```
 
-3. **Compile Bicep file (Optional)**
+3. **(Optional)Compile Bicep file**
 
     If you have Bicep CLI installed, you can manually compile your Bicep file to an ARM template. This step is optional because Azure CLI compiles Bicep files automatically on deployment.
 
@@ -47,7 +47,15 @@ Before you begin, ensure you have the following installed:
     bicep build <your-file>.bicep
     ```
 
-4. **Deploy the Bicep file**
+4. **Create Resource Group**
+
+    If you've already created the ResourceGroup then you can skip this step.
+
+    ```bash
+    az group create --name <resource-group-name> --location <location>
+    ```
+
+5. **Deploy the Bicep file**
 
     Use the Azure CLI to deploy your Bicep file. Replace `<your-resource-group>` with your Azure Resource Group name, and `<your-deployment-name>` with a name for your deployment.  **Note**: since we are using bicep parameter files and they are tied to one bicep file we don't need the --template-file switch.  See [Bicep file with parameters file](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameter-files?tabs=Bicep#deploy-bicep-file-with-parameters-file) for more info.
 
