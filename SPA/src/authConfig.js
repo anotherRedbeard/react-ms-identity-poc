@@ -64,7 +64,7 @@ export const protectedResources = {
         }
     },
     apiConfig: {
-        endpoint: process.env.REACT_APP_API_BASE_ENDPOINT + 'config-api',
+        endpoint: process.env.REACT_APP_API_BASE_ENDPOINT + 'config',
     }
 }
 
