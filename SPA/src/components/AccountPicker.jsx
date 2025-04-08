@@ -18,9 +18,17 @@ export const AccountPicker = (props) => {
             });
         } else if (account && activeAccount.homeAccountId != account.homeAccountId) {
             instance.setActiveAccount(account);
+
+            // Adjust scopes based on account name
+            console.log('Account name: ', account.name);
+            const isAdmin = account.name.includes('Administrator');
+            const scopes = isAdmin
+                ? [...loginRequest.scopes, ...protectedResources.apiTodoList.scopes.write]
+                : [...loginRequest.scopes];
+
             try {
                 await instance.ssoSilent({
-                    ...loginRequest,
+                    scopes: scopes,
                     account: account,
                 });
 
@@ -31,7 +39,7 @@ export const AccountPicker = (props) => {
             } catch (error) {
                 if (error instanceof InteractionRequiredAuthError) {
                     instance.loginRedirect({
-                        ...loginRequest,
+                        scopes: scopes,
                         prompt: 'login',
                     });
                 }
