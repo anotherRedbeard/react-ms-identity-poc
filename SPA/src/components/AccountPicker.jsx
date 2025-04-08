@@ -10,25 +10,17 @@ export const AccountPicker = (props) => {
 
     const handleListItemClick = async (account) => {
         const activeAccount = instance.getActiveAccount();
-
-        console.log('AccountName: ', account);
-        // Adjust scopes based on account name
-        const isAdmin = account && account.name.includes('Administrator');
-        const scopes = isAdmin
-            ? [...loginRequest.scopes, ...protectedResources.apiTodoList.scopes.write]
-            : [...loginRequest.scopes];
-
         if (!account) {
             instance.setActiveAccount(account);
             instance.loginRedirect({
-                scopes: scopes,
+                ...loginRequest,
                 prompt: 'login',
             });
         } else if (account && activeAccount.homeAccountId != account.homeAccountId) {
             instance.setActiveAccount(account);
             try {
                 await instance.ssoSilent({
-                    scopes: scopes,
+                    ...loginRequest,
                     account: account,
                 });
 
@@ -39,7 +31,7 @@ export const AccountPicker = (props) => {
             } catch (error) {
                 if (error instanceof InteractionRequiredAuthError) {
                     instance.loginRedirect({
-                        scopes: scopes,
+                        ...loginRequest,
                         prompt: 'login',
                     });
                 }
